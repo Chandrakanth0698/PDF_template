@@ -18,9 +18,30 @@ for filepath in filepaths:
 
     pdf.set_font(family="Times", style="B", size=20)
     pdf.set_text_color(0, 0, 0)
-    pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice}", border=0, align="L", ln=1 )
+    pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice}", border=0, align="L", ln=1)
     pdf.cell(w=50, h=8, txt=f"Date {date}", border=0, align="L", ln=1)
+    pdf.ln(10)
 
-    pdf.set_font(family="Times", style="B", size=15)
-    pdf.cell(w=0, h=10, txt=df, )
+    column_name = list(df.columns)
+    pdf.set_font(family="Times", style="B", size=10)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(w=30, h=8, txt=column_name[0], border=1)
+    pdf.cell(w=68, h=8, txt=column_name[1], border=1)
+    pdf.cell(w=32, h=8, txt=column_name[2], border=1)
+    pdf.cell(w=30, h=8, txt=column_name[3], border=1)
+    pdf.cell(w=30, h=8, txt=column_name[4], border=1, ln=1)
+    total_amount = 0
+    for index, row in df.iterrows():
+        pdf.set_font(family="Times", style="B", size=10)
+        pdf.set_text_color(0, 0, 0)
+        pdf.cell(w=30, h=8, txt=str(row["product_id"]), border=1)
+        pdf.cell(w=68, h=8, txt=str(row["product_name"]), border=1)
+        pdf.cell(w=32, h=8, txt=str(row["amount_purchased"]), border=1)
+        pdf.cell(w=30, h=8, txt=str(row["price_per_unit"]), border=1)
+        pdf.cell(w=30, h=8, txt=str(row["total_price"]), border=1, ln=1)
+        total_amount = total_amount + row["total_price"]
+
+    pdf.set_font(family="Times", style="B", size=10)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(w=0, h=8, txt=f"Total: {total_amount}", align="R", border=1)
     pdf.output(rf"invoice_pdf\{filename}.pdf")
