@@ -21,8 +21,9 @@ for filepath in filepaths:
     pdf.cell(w=50, h=8, txt=f"Invoice nr.{invoice}", border=0, align="L", ln=1)
     pdf.cell(w=50, h=8, txt=f"Date {date}", border=0, align="L", ln=1)
     pdf.ln(10)
-
+    # Add Headers
     column_name = list(df.columns)
+    column_name = [item.replace("_", " ").title() for item in column_name]
     pdf.set_font(family="Times", style="B", size=10)
     pdf.set_text_color(0, 0, 0)
     pdf.cell(w=30, h=8, txt=column_name[0], border=1)
@@ -30,6 +31,7 @@ for filepath in filepaths:
     pdf.cell(w=32, h=8, txt=column_name[2], border=1)
     pdf.cell(w=30, h=8, txt=column_name[3], border=1)
     pdf.cell(w=30, h=8, txt=column_name[4], border=1, ln=1)
+    # Add rows
     total_amount = 0
     for index, row in df.iterrows():
         pdf.set_font(family="Times", style="B", size=10)
@@ -43,5 +45,13 @@ for filepath in filepaths:
 
     pdf.set_font(family="Times", style="B", size=10)
     pdf.set_text_color(0, 0, 0)
-    pdf.cell(w=0, h=8, txt=f"Total: {total_amount}", align="R", border=1)
+    pdf.cell(w=0, h=8, txt=f"Total: {total_amount}", align="R", border=1, ln=1)
+    pdf.ln(10)
+    pdf.set_font(family="Times", style="B", size=20)
+    pdf.cell(w=0, h=15, txt=f"The total due amount is $ {total_amount} .", align="L",ln=1)
+    # ADD company name and logo
+    pdf.set_font(family="Times", size=20)
+    pdf.cell(w=70, h=10, txt="Your Company name")
+    pdf.image("logo.jpg", w=10)
+
     pdf.output(rf"invoice_pdf\{filename}.pdf")
